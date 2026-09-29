@@ -1,0 +1,135 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sembark Team</title>
+<style>
+:root{--bg:#eef1f4;--pn:#fff;--ink:#1b2433;--mu:#65708a;--ln:#d9dee7;--ac:#0d6b73;--ac2:#e8f3f4;--wr:#b4530a;--wb:#fdf0e3;--ok:#1f7a45;--ob:#e6f4ec;--er:#b3261e;--eb:#fbe9e7}
+@media(prefers-color-scheme:dark){:root:not([data-t=l]){--bg:#111722;--pn:#1a2232;--ink:#e6eaf2;--mu:#8e9ab3;--ln:#2b3549;--ac:#4cc3cc;--ac2:#16303a;--wr:#f0a35e;--wb:#3a2a19;--ok:#6fd39a;--ob:#153323;--er:#f28b82;--eb:#3b1d1b}}
+*{box-sizing:border-box}html,body{height:100%}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-top:env(safe-area-inset-top,0)}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--ln);border-radius:6px;background:var(--pn)}textarea{min-height:70px}
+label{display:block;font-size:12px;color:var(--mu);margin:10px 0 3px}
+.btn{border:1px solid var(--ln);background:var(--pn);padding:7px 12px;border-radius:6px;font-weight:600}.btn.p{background:var(--ac);border-color:var(--ac);color:#fff}.btn.g{border-color:transparent;color:var(--er)}.btn:disabled{opacity:.45;cursor:not-allowed}
+.shell{display:grid;grid-template-columns:220px 1fr;min-height:100%}.side{background:var(--ink);color:#e6eaf2;padding:18px 12px;display:flex;flex-direction:column;gap:4px}
+.brand{font-size:19px;font-weight:800;padding:0 8px 14px;letter-spacing:-.3px}.brand i{color:#4cc3cc;font-style:normal}
+.nav{background:none;border:0;color:#b9c3d8;text-align:left;padding:9px 10px;border-radius:6px;font-weight:600}.nav.on{background:#2a3650;color:#fff}
+.me{margin-top:auto;padding:10px 8px;border-top:1px solid #33405c;font-size:12px;color:#b9c3d8}.me b{display:block;color:#fff;font-size:13px}
+main{padding:24px 28px;max-width:1200px;width:100%}h1{font-size:22px;margin:0 0 4px;letter-spacing:-.3px}h2{font-size:15px;margin:0 0 10px}.sub{color:var(--mu);margin:0 0 18px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.sp{margin-left:auto}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px}
+.st{background:var(--pn);border:1px solid var(--ln);border-radius:8px;padding:12px 14px}.st b{font-size:24px;display:block}.st span{color:var(--mu);font-size:12px}
+.pn{background:var(--pn);border:1px solid var(--ln);border-radius:8px;padding:16px;margin-bottom:16px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:640px}th{text-align:left;font-size:12px;color:var(--mu);font-weight:600;padding:8px;border-bottom:1px solid var(--ln)}td{padding:9px 8px;border-bottom:1px solid var(--ln);vertical-align:middle}tr.c{cursor:pointer}tr.c:hover td{background:var(--ac2)}
+.tg{display:inline-block;padding:1px 8px;border-radius:99px;font-size:11px;font-weight:700;background:var(--ac2);color:var(--ac);margin:0 3px 3px 0}.tg.w{background:var(--wb);color:var(--wr)}.tg.o{background:var(--ob);color:var(--ok)}.tg.e{background:var(--eb);color:var(--er)}
+.bar{display:flex;align-items:center;gap:10px;margin:6px 0}.bar span{width:120px;font-size:13px}.bar div{height:10px;background:var(--ac);border-radius:5px;min-width:3px}.bar em{font-style:normal;color:var(--mu);font-size:12px}
+.seg{display:inline-flex;border:1px solid var(--ln);border-radius:6px;overflow:hidden;margin-bottom:10px}.seg button{border:0;background:var(--pn);padding:6px 12px}.seg .on{background:var(--ac);color:#fff}
+.auth{min-height:100%;display:grid;place-items:center;padding:20px}.card{background:var(--pn);border:1px solid var(--ln);border-radius:10px;padding:26px;width:100%;max-width:400px}.card h1{font-size:24px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.chips button{border:1px dashed var(--ln);background:none;border-radius:99px;padding:3px 10px;font-size:12px}
+.hr{text-align:center;color:var(--mu);font-size:12px;margin:14px 0}
+#ov{position:fixed;inset:0;background:#0007;display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:30px 12px;z-index:9}#ov.on{display:flex}
+.md{background:var(--pn);border-radius:10px;padding:22px;width:100%;max-width:680px}.g2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.it{display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--ln)}.it span{flex:1}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:6px;display:none;z-index:20;max-width:90%}
+@media(max-width:760px){.shell{grid-template-columns:1fr}.side{flex-direction:row;flex-wrap:wrap;align-items:center}.me{margin:0 0 0 auto;border:0}main{padding:16px}.g2{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:no-preference){.md{animation:up .15s ease-out}@keyframes up{from{transform:translateY(8px);opacity:0}}}
+</style></head><body><div id="app"></div><div id="ov"></div><div id="toast"></div>
+<script>
+const K='sembark_v1',$=s=>document.querySelector(s),E=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const D=n=>new Date(Date.now()+n*864e5).toISOString().slice(0,10),TODAY=D(0);
+const RN={admin:'Admin',pm:'Product manager',dev:'Developer',qa:'QA',qam:'QA manager'},STG=['Design','FE','BE','QA','Release'];
+const QAL={'':'Not tested',ready:'Ready to go',bug:'Have bug',local:'In local'};
+function seed(){const u=(id,name,code,role,mgr,email)=>({id,name,code,role,mgr,email,phone:'90000000'+id+'0',st:'active'});
+return{session:null,users:[u(1,'Aarav Sharma','SB001','admin',null,'admin@sembark.com'),u(2,'Priya Mehta','SB002','pm',1,'pm@sembark.com'),u(3,'Rohan Verma','SB003','dev',2,'dev@sembark.com'),u(4,'Meera Iyer','SB004','dev',2,'meera@sembark.com'),u(5,'Kabir Singh','SB005','qa',6,'qa@sembark.com'),u(6,'Neha Kapoor','SB006','qam',1,'qam@sembark.com')],
+tasks:[{id:1,ticket:'SB-101',name:'Itinerary PDF export',desc:'Export day-wise itinerary as branded PDF.',assignee:3,version:'v2.4',stage:'BE',priority:'High',tags:'pdf,itinerary',start:D(-5),end:D(-1),link:'',status:'doing',review:'',qa:'',subs:[{t:'API endpoint',d:1},{t:'Template',d:0}],pr:'In review',report:''},
+{id:2,ticket:'SB-102',name:'Quote sharing on WhatsApp',desc:'Share quote link with one tap.',assignee:4,version:'v2.4',stage:'FE',priority:'Medium',tags:'quote',start:D(-2),end:D(4),link:'',status:'todo',review:'',qa:'',subs:[],pr:'Not opened',report:''},
+{id:3,ticket:'SB-103',name:'Agent commission report',desc:'Monthly commission table with filters.',assignee:3,version:'v2.5',stage:'QA',priority:'Low',tags:'reports',start:D(-9),end:D(-3),link:'',status:'submitted',review:'',qa:'ready',subs:[{t:'Filters',d:1}],pr:'Merged',report:'Filters + export done.'}],
+bugs:[{id:1,task:1,title:'PDF cuts off last day',link:'',sev:'High',by:5,fixed:0}],
+cases:[{id:1,task:1,text:'PDF has all days for a 10-day trip',by:5,st:'pending'},{id:2,task:3,text:'Commission totals match invoices',by:5,st:'approved'}],nid:10}}
+let S=JSON.parse(localStorage.getItem(K)||'null')||seed(),ui={view:'dash',grp:'dev',login:{step:1,email:''},f:{}};
+const save=()=>{localStorage.setItem(K,JSON.stringify(S));render()},me=()=>S.users.find(u=>u.id==S.session),un=id=>(S.users.find(u=>u.id==id)||{}).name||'—',tk=id=>S.tasks.find(t=>t.id==id),nid=()=>S.nid++;
+const toast=m=>{const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display='none',2600)};
+const od=t=>t.status!='done'&&t.end<TODAY,dev=id=>S.users.filter(u=>u.role=='dev');
+const opts=(a,sel)=>a.map(x=>{const v=Array.isArray(x)?x[0]:x,l=Array.isArray(x)?x[1]:x;return`<option value="${E(v)}"${v==sel?' selected':''}>${E(l)}</option>`}).join('');
+const V=id=>$('#'+id).value.trim();
+function render(){S.session&&me()?shell():login()}
+/* ---------- login / invite ---------- */
+function login(){const l=ui.login;
+if(ui.accept){const u=S.users.find(x=>x.id==ui.accept);$('#app').innerHTML=`<div class=auth><div class=card><h1>Accept your invite</h1><p class=sub>Confirm your details to join Sembark.</p>
+${[['Name',u.name],['Employee code',u.code],['Role',RN[u.role]],['Email',u.email],['Phone',u.phone],['Assigned manager',un(u.mgr)]].map(x=>`<label>${x[0]}</label><input value="${E(x[1])}" readonly>`).join('')}
+<label>Set password</label><input id=pw type=password><label class=row style="color:var(--ink)"><input id=tc type=checkbox style="width:auto"> I accept the terms and conditions</label>
+<div class=row style="margin-top:14px"><button class="btn p" onclick="accept()">Create account</button></div></div></div>`;return}
+$('#app').innerHTML=`<div class=auth><div class=card><h1>Sembark Team</h1><p class=sub>Sign in to manage tasks, tests and reviews.</p>
+${l.step==1?`<div class=row><button class="btn sp0" style="flex:1" onclick="sso('GitHub')">GitHub</button><button class=btn style="flex:1" onclick="sso('Google')">Google</button></div><div class=hr>or use email</div>
+<label>Work email</label><input id=em value="${E(l.email)}" placeholder="you@sembark.com"><label>Password</label><input id=pw type=password value=demo>
+<div class=row style="margin-top:14px"><button class="btn p" style="flex:1" onclick="step2()">Send OTP</button></div>
+<label style="margin-top:16px">Demo accounts</label><div class=chips>${S.users.filter(u=>u.st=='active').map(u=>`<button onclick="$('#em').value='${u.email}'">${RN[u.role]}</button>`).join('')}</div>`
+:`<label>Enter the OTP sent to ${E(l.email)}</label><input id=otp maxlength=6 placeholder="123456"><p class=sub style="margin-top:6px">Demo OTP: 123456</p><div class=row><button class="btn p" onclick="verify()">Sign in</button><button class=btn onclick="ui.login.step=1;render()">Back</button></div>`}
+</div></div>`}
+function find(em){const u=S.users.find(x=>x.email.toLowerCase()==em.toLowerCase());if(!u)return toast('No account with that email.'),0;if(u.st!='active')return toast('Accept your invite first (Team page, admin).'),0;return u}
+function step2(){const em=V('em'),u=find(em);if(u){ui.login={step:2,email:em};render()}}
+function sso(p){const em=V('em')||'pm@sembark.com',u=find(em);if(u){S.session=u.id;ui.view='dash';save();toast('Signed in with '+p)}}
+function verify(){if(V('otp')!='123456')return toast('Wrong OTP. Use 123456.');S.session=find(ui.login.email).id;ui.login={step:1,email:''};ui.view='dash';save()}
+function accept(){if(!$('#tc').checked||V('pw').length<4)return toast('Set a password (4+ chars) and accept the terms.');const u=S.users.find(x=>x.id==ui.accept);u.st='active';ui.login={step:1,email:u.email};ui.accept=0;save();toast('Account ready. Sign in.')}
+function out(){S.session=null;save()}
+/* ---------- shell ---------- */
+function shell(){const u=me(),r=u.role,nav=[['dash','Dashboard'],['tasks','Tasks']];
+if(r=='admin')nav.push(['team','Team & invites']);if(r=='qam'||r=='admin')nav.push(['rev','Test-case reviews']);if(r=='dev')nav.push(['gh','GitHub PRs']);
+$('#app').innerHTML=`<div class=shell><aside class=side><div class=brand>sembark<i>.</i>team</div>${nav.map(n=>`<button class="nav${ui.view==n[0]?' on':''}" onclick="ui.view='${n[0]}';render()">${n[1]}</button>`).join('')}<div class=me><b>${E(u.name)}</b>${RN[r]} · ${u.code}<br><button class=btn style="margin-top:8px;padding:3px 10px" onclick="out()">Sign out</button></div></aside><main>${{dash,tasks,team,rev:revView,gh}[ui.view]()}</main></div>`}
+const mine=()=>S.tasks.filter(t=>t.assignee==me().id);
+const stat=(a)=>`<div class=stats>${a.map(x=>`<div class=st><b>${x[1]}</b><span>${x[0]}</span></div>`).join('')}</div>`;
+function dash(){const u=me(),r=u.role,all=S.tasks,my=r=='dev'||r=='qa'?(r=='dev'?mine():all):all,pend=S.cases.filter(c=>c.st=='pending').length;
+let h=`<h1>Hello, ${E(u.name.split(' ')[0])}</h1><p class=sub>${RN[r]} dashboard</p>`;
+h+=stat([['Open tasks',my.filter(t=>t.status!='done').length],['Overdue',my.filter(od).length],['In review',my.filter(t=>t.status=='submitted').length],['Open bugs',S.bugs.filter(b=>!b.fixed&&(r!='dev'||mine().some(t=>t.id==b.task))).length],['Cases to review',pend]]);
+if(r=='dev'){const c=mine().find(t=>t.status=='doing');h+=`<div class=pn><h2>My task today</h2>${c?`<b>${c.ticket} · ${E(c.name)}</b> <button class=btn onclick="detail(${c.id})">Open</button><p class=sub>One task at a time — submit your work report to pick the next one.</p>`:'<p class=sub>Nothing in progress. Pick one task from the list below.</p>'}</div>`}
+if(r!='dev'){const g={dev:['Developer wise',t=>un(t.assignee)],ver:['Version wise',t=>t.version],stg:['Stage wise',t=>t.stage]},f=g[ui.grp][1],c={};all.forEach(t=>c[f(t)]=(c[f(t)]||0)+1);const m=Math.max(...Object.values(c),1);
+h+=`<div class=pn><h2>Task overview</h2><div class=seg>${Object.entries(g).map(([k,v])=>`<button class="${ui.grp==k?'on':''}" onclick="ui.grp='${k}';render()">${v[0]}</button>`).join('')}</div>${Object.entries(c).map(([k,v])=>`<div class=bar><span>${E(k)}</span><div style="width:${v/m*60}%"></div><em>${v}</em></div>`).join('')}</div>`;
+h+=`<div class=pn><h2>Team members & status</h2><table><tr><th>Member<th>Role<th>Tasks<th>Overdue<th>Awaiting review</tr>${S.users.filter(x=>x.role=='dev'||x.role=='qa').map(x=>{const ts=S.tasks.filter(t=>t.assignee==x.id);return`<tr><td>${E(x.name)}<td>${RN[x.role]}<td>${ts.length}<td>${ts.filter(od).length}<td>${ts.filter(t=>t.status=='submitted').length}</tr>`}).join('')}</table></div>`}
+return h+`<div class=pn><h2>${r=='dev'?'My tasks':'Latest tasks'}</h2>${tbl(my.slice(0,6))}</div>`}
+/* ---------- tasks ---------- */
+function badges(t){return(od(t)?'<span class="tg e">Overdue</span>':'')+`<span class="tg${t.status=='done'?' o':''}">${{todo:'To do',doing:'In progress',submitted:'Submitted',done:'Done'}[t.status]}</span>`+(t.qa?`<span class="tg ${t.qa=='bug'?'w':'o'}">${QAL[t.qa]}</span>`:'')}
+function tbl(ts){return ts.length?`<table><tr><th>Ticket<th>Task<th>Assignee<th>Version<th>Stage<th>Priority<th>Due<th>Status</tr>${ts.map(t=>`<tr class=c onclick="detail(${t.id})"><td>${t.ticket}<td>${E(t.name)}<td>${E(un(t.assignee))}<td>${t.version}<td>${t.stage}<td>${t.priority}<td>${t.end}<td>${badges(t)}</tr>`).join('')}</table>`:'<p class=sub>No tasks match. Change the filters or add a task.</p>'}
+function tasks(){const r=me().role,f=ui.f;let ts=S.tasks.filter(t=>(r!='dev'||t.assignee==me().id)&&(!f.v||t.version==f.v)&&(!f.a||t.assignee==f.a)&&(!f.s||t.stage==f.s)&&(!f.q||(t.name+t.ticket+t.tags).toLowerCase().includes(f.q.toLowerCase())));
+const vs=[...new Set(S.tasks.map(t=>t.version))];
+return`<div class=row><div><h1>Tasks</h1><p class=sub>${ts.length} shown</p></div><div class="row sp">${r=='pm'||r=='admin'?'<button class="btn p" onclick="newTask()">New task</button>':''}<button class=btn onclick="copyT()">Copy table</button></div></div>
+<div class=row style="margin-bottom:12px"><input style="max-width:200px" placeholder="Search" value="${E(f.q||'')}" onchange="ui.f.q=this.value;render()"><select style="max-width:130px" onchange="ui.f.v=this.value;render()"><option value="">All versions</option>${opts(vs,f.v)}</select><select style="max-width:160px" onchange="ui.f.a=+this.value||0;render()"><option value="">All people</option>${opts(S.users.filter(x=>x.role=='dev'||x.role=='qa').map(x=>[x.id,x.name]),f.a)}</select><select style="max-width:130px" onchange="ui.f.s=this.value;render()"><option value="">All stages</option>${opts(STG,f.s)}</select></div><div class=pn>${tbl(ts)}</div>`}
+function copyT(){const tx=S.tasks.map(t=>[t.ticket,t.name,un(t.assignee),t.version,t.stage,t.end,t.status,QAL[t.qa]].join('\t')).join('\n');navigator.clipboard?.writeText(tx).then(()=>toast('Table copied. Paste it anywhere.'),()=>toast('Copy blocked by browser.'))}
+const modal=h=>{$('#ov').innerHTML=`<div class=md>${h}</div>`;$('#ov').classList.add('on')},close=()=>$('#ov').classList.remove('on');
+$('#ov').onclick=e=>{if(e.target.id=='ov')close()};
+function newTask(){modal(`<h2>New task</h2><div class=g2><div><label>Task name</label><input id=n></div><div><label>Assign to</label><select id=a>${opts(S.users.filter(x=>x.role=='dev'||x.role=='qa').map(x=>[x.id,x.name+' ('+RN[x.role]+')']))}</select></div>
+<div><label>Version</label><input id=v value="v2.5"></div><div><label>Stage</label><select id=s>${opts(STG)}</select></div><div><label>Start date</label><input id=sd type=date value="${TODAY}"></div><div><label>End date</label><input id=ed type=date value="${D(7)}"></div>
+<div><label>Priority</label><select id=p>${opts(['High','Medium','Low'],'Medium')}</select></div><div><label>Tags</label><input id=tg placeholder="comma separated"></div></div>
+<label>Description / use cases</label><textarea id=d></textarea><label>PRD or design link</label><input id=l placeholder="https://"><div class=row style="margin-top:14px"><button class="btn p" onclick="addTask()">Create task</button><button class=btn onclick="close()">Cancel</button></div>`)}
+function addTask(){if(!V('n'))return toast('Add a task name.');const id=nid();S.tasks.push({id,ticket:'SB-'+(100+S.tasks.length+1),name:V('n'),desc:V('d'),assignee:+V('a'),version:V('v'),stage:V('s'),priority:V('p'),tags:V('tg'),start:V('sd'),end:V('ed'),link:V('l'),status:'todo',review:'',qa:'',subs:[],pr:'Not opened',report:''});close();save();toast('Task created')}
+function detail(id){const t=tk(id),u=me(),r=u.role,own=t.assignee==u.id,bugs=S.bugs.filter(b=>b.task==id),cs=S.cases.filter(c=>c.task==id),pm=r=='pm'||r=='admin';
+modal(`<div class=row><h2 style="margin:0">${t.ticket} · ${E(t.name)}</h2><button class="btn sp" onclick="close()">Close</button></div><p>${badges(t)}<span class=tg>${t.stage}</span><span class="tg w">${t.priority}</span>${t.tags.split(',').filter(Boolean).map(x=>`<span class=tg>${E(x)}</span>`).join('')}</p>
+<p>${E(t.desc)||'No description.'}</p><p class=sub>Assignee ${E(un(t.assignee))} · ${t.version} · ${t.start} to ${t.end} · PR: ${t.pr}${t.link?` · <a href="${E(t.link)}" target=_blank rel=noopener>PRD / design</a>`:''}</p>
+${t.report?`<p><b>Work report:</b> ${E(t.report)}</p>`:''}
+<h2>Sub-tasks</h2>${t.subs.map((s,i)=>`<div class=it><input type=checkbox style="width:auto" ${s.d?'checked':''} onchange="tog(${id},${i})"><span>${E(s.t)}</span></div>`).join('')||'<p class=sub>None yet.</p>'}
+${pm||own?`<div class=row style="margin-top:8px"><input id=ns placeholder="Add sub-task" style="flex:1"><button class=btn onclick="addSub(${id})">Add</button></div>`:''}
+<h2 style="margin-top:16px">Test cases</h2>${cs.map(c=>`<div class=it><span>${E(c.text)}</span><span class="tg ${c.st=='approved'?'o':c.st=='rejected'?'e':'w'}" style="flex:none">${c.st}</span></div>`).join('')||'<p class=sub>No test cases.</p>'}
+${r=='qa'?`<div class=row style="margin-top:8px"><input id=tc placeholder="Test case for this feature" style="flex:1"><button class=btn onclick="addCase(${id})">Add</button></div>`:''}
+<h2 style="margin-top:16px">Bugs</h2>${bugs.map(b=>`<div class=it><span>${E(b.title)} <span class="tg w">${b.sev}</span>${b.link?`<a href="${E(b.link)}" target=_blank rel=noopener>image</a>`:''}</span>${b.fixed?'<span class="tg o">Fixed</span>':own&&r=='dev'?`<button class=btn onclick="fix(${b.id},${id})">Mark fixed</button>`:'<span class="tg e">Open</span>'}</div>`).join('')||'<p class=sub>No bugs.</p>'}
+${r=='qa'?`<div class=row style="margin-top:8px"><input id=bt placeholder="Bug title" style="flex:2"><input id=bl placeholder="Image link" style="flex:2"><select id=bs style="flex:1">${opts(['High','Medium','Low'])}</select><button class=btn onclick="addBug(${id})">Log bug</button></div>
+<label>QA status</label><select onchange="setQA(${id},this.value)">${opts(Object.entries(QAL),t.qa)}</select>`:''}
+<div class=row style="margin-top:18px">
+${r=='dev'&&own&&t.status=='todo'?`<button class="btn p" onclick="start(${id})">Start working</button>`:''}
+${r=='dev'&&own&&t.status=='doing'?`<textarea id=rp placeholder="Work report (required to submit)"></textarea><button class="btn p" onclick="submitW(${id})">Submit work</button>`:''}
+${pm&&t.status=='submitted'?`<button class="btn p" onclick="rev(${id},1)">Approve</button><button class=btn onclick="rev(${id},0)">Request changes</button>`:''}
+${pm?`<select style="max-width:140px" onchange="tk(${id}).stage=this.value;save();detail(${id})">${opts(STG,t.stage)}</select><button class="btn g sp" onclick="del(${id})">Delete</button>`:''}</div>`)}
+function tog(id,i){const s=tk(id).subs[i];s.d=!s.d;save();detail(id)}
+function addSub(id){if(V('ns')){tk(id).subs.push({t:V('ns'),d:0});save();detail(id)}}
+function addCase(id){if(V('tc')){S.cases.push({id:nid(),task:id,text:V('tc'),by:me().id,st:'pending'});save();detail(id);toast('Sent to QA manager for review')}}
+function addBug(id){if(!V('bt'))return toast('Add a bug title.');S.bugs.push({id:nid(),task:id,title:V('bt'),link:V('bl'),sev:V('bs'),by:me().id,fixed:0});tk(id).qa='bug';save();detail(id)}
+function setQA(id,v){tk(id).qa=v;save();detail(id)}
+function fix(b,id){S.bugs.find(x=>x.id==b).fixed=1;save();detail(id)}
+function start(id){const busy=mine().find(t=>t.status=='doing');if(busy)return toast(`Submit ${busy.ticket} first. Only one task at a time.`);tk(id).status='doing';save();detail(id)}
+function submitW(id){if(!V('rp'))return toast('Add a work report to submit.');const t=tk(id);t.status='submitted';t.report=V('rp');t.review='';save();detail(id);toast('Submitted for review')}
+function del(id){if(confirm('Delete this task?')){S.tasks=S.tasks.filter(t=>t.id!=id);close();save()}}
+/* ---------- QA manager review, GitHub, team ---------- */
+function rev(id,ok){const t=tk(id);if(ok&&t.qa!='ready')return toast('QA status must be "Ready to go" before approval.');t.status=ok?'done':'doing';t.review=ok?'approved':'changes';save();close();toast(ok?'Approved':'Sent back to developer')}
+window.review=(id,v)=>{S.cases.find(c=>c.id==id).st=v;save()};
+function revView(){const cs=S.cases;return`<h1>Test-case reviews</h1><p class=sub>Approve or reject test cases written by QA.</p><div class=pn>${cs.length?`<table><tr><th>Task<th>Test case<th>By<th>Status<th></tr>${cs.map(c=>`<tr><td>${tk(c.task)?.ticket||''}<td>${E(c.text)}<td>${E(un(c.by))}<td><span class="tg ${c.st=='approved'?'o':c.st=='rejected'?'e':'w'}">${c.st}</span><td>${c.st=='pending'?`<button class=btn onclick="review(${c.id},'approved')">Approve</button> <button class=btn onclick="review(${c.id},'rejected')">Reject</button>`:''}</tr>`).join('')}</table>`:'<p class=sub>Nothing to review yet.</p>'}</div>`}
+function gh(){return`<h1>GitHub PRs</h1><p class=sub>Status of pull requests for your tasks.</p><div class=pn><table><tr><th>Ticket<th>Task<th>PR status<th></tr>${mine().map(t=>`<tr><td>${t.ticket}<td>${E(t.name)}<td><span class="tg ${t.pr=='Merged'?'o':'w'}">${t.pr}</span><td><select onchange="tk(${t.id}).pr=this.value;save()">${opts(['Not opened','Open','In review','Merged'],t.pr)}</select></tr>`).join('')}</table></div><p class=sub>Prototype: statuses are set by hand. Connect the GitHub API to sync them.</p>`}
+function team(){return`<h1>Team & invites</h1><p class=sub>Invite an employee. They get a link, confirm details and sign in with an OTP.</p><div class=pn><h2>Invite employee</h2><div class=g2><div><label>Name</label><input id=in></div><div><label>Employee code</label><input id=ic></div><div><label>Email</label><input id=ie type=email></div><div><label>Phone</label><input id=ip></div>
+<div><label>Role</label><select id=ir>${opts(Object.entries(RN).filter(x=>x[0]!='admin'))}</select></div><div><label>Assigned manager</label><select id=im>${opts(S.users.filter(x=>x.role!='dev'&&x.role!='qa').map(x=>[x.id,x.name]))}</select></div></div><div class=row style="margin-top:12px"><button class="btn p" onclick="invite()">Send invite</button></div></div>
+<div class=pn><table><tr><th>Name<th>Code<th>Role<th>Manager<th>Status<th></tr>${S.users.map(u=>`<tr><td>${E(u.name)}<td>${u.code}<td>${RN[u.role]}<td>${E(un(u.mgr))}<td><span class="tg ${u.st=='active'?'o':'w'}">${u.st}</span><td>${u.st=='invited'?`<button class=btn onclick="ui.accept=${u.id};S.session=null;render()">Open invite link</button>`:''}</tr>`).join('')}</table></div>`}
+function invite(){if(!V('in')||!V('ie'))return toast('Name and email are required.');S.users.push({id:nid(),name:V('in'),code:V('ic')||'SB'+(100+S.users.length),email:V('ie'),phone:V('ip'),role:V('ir'),mgr:+V('im'),st:'invited'});save();toast('Invite sent (demo: use "Open invite link")')}
+render();
+</script></body></html>
