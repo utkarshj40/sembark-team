@@ -30,7 +30,10 @@ table{width:100%;border-collapse:collapse;min-width:640px}th{text-align:left;fon
 @media(max-width:760px){.shell{grid-template-columns:1fr}.side{flex-direction:row;flex-wrap:wrap;align-items:center}.me{margin:0 0 0 auto;border:0}main{padding:16px}.g2{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:no-preference){.md{animation:up .15s ease-out}@keyframes up{from{transform:translateY(8px);opacity:0}}}
 </style></head><body><div id="app"></div><div id="ov"></div><div id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const SB_URL='https://ufwvlmxtpxjyctdlfijj.supabase.co',SB_KEY='sb_publishable_YdO9KA_kkQHYs0EFy6uNIA_JnagwCyP'; // paste your Supabase project URL and anon key here
+const sb=(SB_URL&&SB_KEY&&window.supabase)?supabase.createClient(SB_URL,SB_KEY):null;
 const K='sembark_v1',$=s=>document.querySelector(s),E=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const D=n=>new Date(Date.now()+n*864e5).toISOString().slice(0,10),TODAY=D(0);
 const RN={admin:'Admin',pm:'Product manager',dev:'Developer',qa:'QA',qam:'QA manager'},STG=['Design','FE','BE','QA','Release'];
@@ -42,32 +45,37 @@ tasks:[{id:1,ticket:'SB-101',name:'Itinerary PDF export',desc:'Export day-wise i
 {id:3,ticket:'SB-103',name:'Agent commission report',desc:'Monthly commission table with filters.',assignee:3,version:'v2.5',stage:'QA',priority:'Low',tags:'reports',start:D(-9),end:D(-3),link:'',status:'submitted',review:'',qa:'ready',subs:[{t:'Filters',d:1}],pr:'Merged',report:'Filters + export done.'}],
 bugs:[{id:1,task:1,title:'PDF cuts off last day',link:'',sev:'High',by:5,fixed:0}],
 cases:[{id:1,task:1,text:'PDF has all days for a 10-day trip',by:5,st:'pending'},{id:2,task:3,text:'Commission totals match invoices',by:5,st:'approved'}],nid:10}}
-let S=JSON.parse(localStorage.getItem(K)||'null')||seed(),ui={view:'dash',grp:'dev',login:{step:1,email:''},f:{}};
-const save=()=>{localStorage.setItem(K,JSON.stringify(S));render()},me=()=>S.users.find(u=>u.id==S.session),un=id=>(S.users.find(u=>u.id==id)||{}).name||'—',tk=id=>S.tasks.find(t=>t.id==id),nid=()=>S.nid++;
+let S=sb?{session:null,users:[],tasks:[],bugs:[],cases:[],nid:10}:(JSON.parse(localStorage.getItem(K)||'null')||seed()),AUTH=null,ui={view:'dash',grp:'dev',login:{step:1,email:''},f:{}};
+const save=()=>{if(sb)push();else localStorage.setItem(K,JSON.stringify(S));render()},me=()=>S.users.find(u=>u.id==S.session),un=id=>(S.users.find(u=>u.id==id)||{}).name||'—',tk=id=>S.tasks.find(t=>t.id==id),nid=()=>S.nid++;
 const toast=m=>{const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display='none',2600)};
 const od=t=>t.status!='done'&&t.end<TODAY,dev=id=>S.users.filter(u=>u.role=='dev');
 const opts=(a,sel)=>a.map(x=>{const v=Array.isArray(x)?x[0]:x,l=Array.isArray(x)?x[1]:x;return`<option value="${E(v)}"${v==sel?' selected':''}>${E(l)}</option>`}).join('');
 const V=id=>$('#'+id).value.trim();
+async function push(){const c={...S};delete c.session;const{error}=await sb.from('app_state').update({data:c}).eq('id',1);if(error)toast('Save failed: '+error.message)}
+async function pull(){const{data,error}=await sb.from('app_state').select('data').eq('id',1).maybeSingle();if(error||!data)return false;const s=S.session;S=data.data;S.session=s;return true}
+async function enter(){const em=AUTH,ok=em&&await pull(),u=ok&&S.users.find(x=>x.email.toLowerCase()==em.toLowerCase());
+if(!u){toast((em||'This email')+' is not invited to Sembark Team.');await sb.auth.signOut();AUTH=null;S.session=null;return render()}
+if(u.st=='invited')ui.accept=u.id;else{S.session=u.id;ui.view='dash'}render()}
 function render(){S.session&&me()?shell():login()}
 /* ---------- login / invite ---------- */
 function login(){const l=ui.login;
 if(ui.accept){const u=S.users.find(x=>x.id==ui.accept);$('#app').innerHTML=`<div class=auth><div class=card><h1>Accept your invite</h1><p class=sub>Confirm your details to join Sembark.</p>
 ${[['Name',u.name],['Employee code',u.code],['Role',RN[u.role]],['Email',u.email],['Phone',u.phone],['Assigned manager',un(u.mgr)]].map(x=>`<label>${x[0]}</label><input value="${E(x[1])}" readonly>`).join('')}
-<label>Set password</label><input id=pw type=password><label class=row style="color:var(--ink)"><input id=tc type=checkbox style="width:auto"> I accept the terms and conditions</label>
+${sb?'':'<label>Set password</label><input id=pw type=password>'}<label class=row style="color:var(--ink)"><input id=tc type=checkbox style="width:auto"> I accept the terms and conditions</label>
 <div class=row style="margin-top:14px"><button class="btn p" onclick="accept()">Create account</button></div></div></div>`;return}
 $('#app').innerHTML=`<div class=auth><div class=card><h1>Sembark Team</h1><p class=sub>Sign in to manage tasks, tests and reviews.</p>
 ${l.step==1?`<div class=row><button class="btn sp0" style="flex:1" onclick="sso('GitHub')">GitHub</button><button class=btn style="flex:1" onclick="sso('Google')">Google</button></div><div class=hr>or use email</div>
-<label>Work email</label><input id=em value="${E(l.email)}" placeholder="you@sembark.com"><label>Password</label><input id=pw type=password value=demo>
+<label>Work email</label><input id=em value="${E(l.email)}" placeholder="you@sembark.com">${sb?'':'<label>Password</label><input id=pw type=password value=demo>'}
 <div class=row style="margin-top:14px"><button class="btn p" style="flex:1" onclick="step2()">Send OTP</button></div>
-<label style="margin-top:16px">Demo accounts</label><div class=chips>${S.users.filter(u=>u.st=='active').map(u=>`<button onclick="$('#em').value='${u.email}'">${RN[u.role]}</button>`).join('')}</div>`
-:`<label>Enter the OTP sent to ${E(l.email)}</label><input id=otp maxlength=6 placeholder="123456"><p class=sub style="margin-top:6px">Demo OTP: 123456</p><div class=row><button class="btn p" onclick="verify()">Sign in</button><button class=btn onclick="ui.login.step=1;render()">Back</button></div>`}
+${sb?'':'<label style="margin-top:16px">Demo accounts</label>'}<div class=chips>${(sb?[]:S.users).filter(u=>u.st=='active').map(u=>`<button onclick="$('#em').value='${u.email}'">${RN[u.role]}</button>`).join('')}</div>`
+:`<label>Enter the OTP sent to ${E(l.email)}</label><input id=otp maxlength=8 placeholder="Code"><p class=sub style="margin-top:6px">${sb?'Check your email for the code.':'Demo OTP: 123456'}</p><div class=row><button class="btn p" onclick="verify()">Sign in</button><button class=btn onclick="ui.login.step=1;render()">Back</button></div>`}
 </div></div>`}
 function find(em){const u=S.users.find(x=>x.email.toLowerCase()==em.toLowerCase());if(!u)return toast('No account with that email.'),0;if(u.st!='active')return toast('Accept your invite first (Team page, admin).'),0;return u}
-function step2(){const em=V('em'),u=find(em);if(u){ui.login={step:2,email:em};render()}}
-function sso(p){const em=V('em')||'pm@sembark.com',u=find(em);if(u){S.session=u.id;ui.view='dash';save();toast('Signed in with '+p)}}
-function verify(){if(V('otp')!='123456')return toast('Wrong OTP. Use 123456.');S.session=find(ui.login.email).id;ui.login={step:1,email:''};ui.view='dash';save()}
-function accept(){if(!$('#tc').checked||V('pw').length<4)return toast('Set a password (4+ chars) and accept the terms.');const u=S.users.find(x=>x.id==ui.accept);u.st='active';ui.login={step:1,email:u.email};ui.accept=0;save();toast('Account ready. Sign in.')}
-function out(){S.session=null;save()}
+async function step2(){const em=V('em');if(sb){if(!em)return toast('Enter your work email.');const{error}=await sb.auth.signInWithOtp({email:em});if(error)return toast(error.message);ui.login={step:2,email:em};return render()}const u=find(em);if(u){ui.login={step:2,email:em};render()}}
+function sso(p){if(sb)return sb.auth.signInWithOAuth({provider:p.toLowerCase(),options:{redirectTo:location.origin}});toast('Demo mode: add Supabase keys for real '+p+' login.');const em=V('em')||'pm@sembark.com',u=find(em);if(u){S.session=u.id;ui.view='dash';save();toast('Signed in with '+p)}}
+async function verify(){if(sb){const{error}=await sb.auth.verifyOtp({email:ui.login.email,token:V('otp'),type:'email'});if(error)return toast(error.message);AUTH=ui.login.email;ui.login={step:1,email:''};return enter()}if(V('otp')!='123456')return toast('Wrong OTP. Use 123456.');S.session=find(ui.login.email).id;ui.login={step:1,email:''};ui.view='dash';save()}
+function accept(){if(!$('#tc').checked||(!sb&&V('pw').length<4))return toast(sb?'Accept the terms to continue.':'Set a password (4+ chars) and accept the terms.');const u=S.users.find(x=>x.id==ui.accept);u.st='active';ui.accept=0;if(sb){S.session=u.id;ui.view='dash'}else ui.login={step:1,email:u.email};save();toast(sb?'Welcome to Sembark Team':'Account ready. Sign in.')}
+function out(){S.session=null;AUTH=null;if(sb){sb.auth.signOut();return render()}save()}
 /* ---------- shell ---------- */
 function shell(){const u=me(),r=u.role,nav=[['dash','Dashboard'],['tasks','Tasks']];
 if(r=='admin')nav.push(['team','Team & invites']);if(r=='qam'||r=='admin')nav.push(['rev','Test-case reviews']);if(r=='dev')nav.push(['gh','GitHub PRs']);
@@ -129,7 +137,9 @@ function revView(){const cs=S.cases;return`<h1>Test-case reviews</h1><p class=su
 function gh(){return`<h1>GitHub PRs</h1><p class=sub>Status of pull requests for your tasks.</p><div class=pn><table><tr><th>Ticket<th>Task<th>PR status<th></tr>${mine().map(t=>`<tr><td>${t.ticket}<td>${E(t.name)}<td><span class="tg ${t.pr=='Merged'?'o':'w'}">${t.pr}</span><td><select onchange="tk(${t.id}).pr=this.value;save()">${opts(['Not opened','Open','In review','Merged'],t.pr)}</select></tr>`).join('')}</table></div><p class=sub>Prototype: statuses are set by hand. Connect the GitHub API to sync them.</p>`}
 function team(){return`<h1>Team & invites</h1><p class=sub>Invite an employee. They get a link, confirm details and sign in with an OTP.</p><div class=pn><h2>Invite employee</h2><div class=g2><div><label>Name</label><input id=in></div><div><label>Employee code</label><input id=ic></div><div><label>Email</label><input id=ie type=email></div><div><label>Phone</label><input id=ip></div>
 <div><label>Role</label><select id=ir>${opts(Object.entries(RN).filter(x=>x[0]!='admin'))}</select></div><div><label>Assigned manager</label><select id=im>${opts(S.users.filter(x=>x.role!='dev'&&x.role!='qa').map(x=>[x.id,x.name]))}</select></div></div><div class=row style="margin-top:12px"><button class="btn p" onclick="invite()">Send invite</button></div></div>
-<div class=pn><table><tr><th>Name<th>Code<th>Role<th>Manager<th>Status<th></tr>${S.users.map(u=>`<tr><td>${E(u.name)}<td>${u.code}<td>${RN[u.role]}<td>${E(un(u.mgr))}<td><span class="tg ${u.st=='active'?'o':'w'}">${u.st}</span><td>${u.st=='invited'?`<button class=btn onclick="ui.accept=${u.id};S.session=null;render()">Open invite link</button>`:''}</tr>`).join('')}</table></div>`}
-function invite(){if(!V('in')||!V('ie'))return toast('Name and email are required.');S.users.push({id:nid(),name:V('in'),code:V('ic')||'SB'+(100+S.users.length),email:V('ie'),phone:V('ip'),role:V('ir'),mgr:+V('im'),st:'invited'});save();toast('Invite sent (demo: use "Open invite link")')}
+<div class=pn><table><tr><th>Name<th>Code<th>Role<th>Manager<th>Status<th></tr>${S.users.map(u=>`<tr><td>${E(u.name)}<td>${u.code}<td>${RN[u.role]}<td>${E(un(u.mgr))}<td><span class="tg ${u.st=='active'?'o':'w'}">${u.st}</span><td>${u.st=='invited'&&sb?'<span class=sub>Waiting for first sign-in</span>':u.st=='invited'?`<button class=btn onclick="ui.accept=${u.id};S.session=null;render()">Open invite link</button>`:''}</tr>`).join('')}</table></div>`}
+function invite(){if(!V('in')||!V('ie'))return toast('Name and email are required.');S.users.push({id:nid(),name:V('in'),code:V('ic')||'SB'+(100+S.users.length),email:V('ie'),phone:V('ip'),role:V('ir'),mgr:+V('im'),st:'invited'});save();toast(sb?'Invite saved. Ask them to sign in with '+V('ie'):'Invite sent (demo: use "Open invite link")')}
 render();
+if(sb){sb.auth.getSession().then(({data})=>{if(data.session){AUTH=data.session.user.email;enter()}});
+setInterval(async()=>{if(S.session&&!$('#ov').classList.contains('on')&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)&&await pull())render()},15000)}
 </script></body></html>
